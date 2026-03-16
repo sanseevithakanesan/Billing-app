@@ -14,11 +14,11 @@ class InvoiceProvider extends ChangeNotifier {
   InvoiceState _state = InvoiceState.idle;
   String? _error;
 
-  List<Invoice> get invoices       => _invoices;
-  Invoice? get currentInvoice      => _currentInvoice;
-  InvoiceState get state           => _state;
-  String? get error                => _error;
-  bool get isLoading               => _state == InvoiceState.loading;
+  List<Invoice> get invoices => _invoices;
+  Invoice? get currentInvoice => _currentInvoice;
+  InvoiceState get state => _state;
+  String? get error => _error;
+  bool get isLoading => _state == InvoiceState.loading;
 
   // ============================================
   // Create Invoice — Cart items + Customer
@@ -35,20 +35,25 @@ class InvoiceProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final items = cartItems.map((item) => {
-        'product_id': item.product.id,
-        'qty':        item.qty,
-      }).toList();
+      final items = cartItems
+          .map((item) => {
+                'product_id': item.product.id,
+                'qty': item.qty,
+              })
+          .toList();
 
       final response = await _api.post('/invoices', {
-        'customer_id':     customerId,
-        'items':           items,
-        'tax_percent':     taxPercent,
+        'customer_id': customerId,
+        'items': items,
+        'tax_percent': taxPercent,
         'discount_amount': discountAmount,
         if (notes != null) 'notes': notes,
       });
 
       _currentInvoice = Invoice.fromJson(response['invoice']);
+      final created = Invoice.fromJson(response['invoice']);
+      // final fullData = await _api.get('/invoices/${created.id}');
+      // _currentInvoice = Invoice.fromJson(fullData);
       _invoices.insert(0, _currentInvoice!); // List-ல் top-ல் சேர்க்கவும்
       _state = InvoiceState.success;
       notifyListeners();
@@ -111,24 +116,33 @@ class InvoiceProvider extends ChangeNotifier {
 // Invoice toJson extension
 extension InvoiceJson on Invoice {
   Map<String, dynamic> toJson() => {
-    'id':              id,
-    'invoice_no':      invoiceNo,
-    'customer_id':     customerId,
-    'customer':        customer != null ? {
-      'id': customer!.id, 'name': customer!.name, 'phone': customer!.phone
-    } : null,
-    'items':           items.map((i) => {
-      'id': i.id, 'product_id': i.productId,
-      'product': {'name': i.productName},
-      'qty': i.qty, 'unit_price': i.unitPrice, 'line_total': i.lineTotal,
-    }).toList(),
-    'subtotal':        subtotal,
-    'tax_percent':     taxPercent,
-    'tax_amount':      taxAmount,
-    'discount_amount': discountAmount,
-    'total':           total,
-    'status':          status,
-    'notes':           notes,
-    'created_at':      createdAt,
-  };
+        'id': id,
+        'invoice_no': invoiceNo,
+        'customer_id': customerId,
+        'customer': customer != null
+            ? {
+                'id': customer!.id,
+                'name': customer!.name,
+                'phone': customer!.phone
+              }
+            : null,
+        'items': items
+            .map((i) => {
+                  'id': i.id,
+                  'product_id': i.productId,
+                  'product': {'name': i.productName},
+                  'qty': i.qty,
+                  'unit_price': i.unitPrice,
+                  'line_total': i.lineTotal,
+                })
+            .toList(),
+        'subtotal': subtotal,
+        'tax_percent': taxPercent,
+        'tax_amount': taxAmount,
+        'discount_amount': discountAmount,
+        'total': total,
+        'status': status,
+        'notes': notes,
+        'created_at': createdAt,
+      };
 }

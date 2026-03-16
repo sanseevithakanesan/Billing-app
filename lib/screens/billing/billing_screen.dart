@@ -1,6 +1,6 @@
 // lib/screens/billing/billing_screen.dart
 // ── Scan மூலம் அல்லது Product List-லிருந்து real DB products add செய்யலாம் ──
-import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../providers/cart_provider.dart';
@@ -12,6 +12,8 @@ import '../invoices/invoice_detail_screen.dart';
 import '../billing/cart_screen.dart';
 import '../auth/login_screen.dart';
 import '../../providers/auth_provider.dart';
+import '../admin/admin_panel_screen.dart';
+import 'package:flutter/material.dart';
 
 
 class BillingScreen extends StatelessWidget {
@@ -28,6 +30,48 @@ class BillingScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
+          // Cart icon with badge
+          Consumer<CartProvider>(
+            builder: (context, cart, child) {
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const CartScreen()),
+                    ),
+                  ),
+                  if (cart.itemCount > 0)
+                    Positioned(
+                      right: 4,
+                      top: 4,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${cart.itemCount}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
           // Product List icon
           IconButton(
             icon: const Icon(Icons.inventory_2_outlined),
@@ -35,8 +79,30 @@ class BillingScreen extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (_) => const ProductListScreen()),
             ),
-            tooltip: 'Products பார்க்கவும்',
+            tooltip: 'Products',
           ),
+          // Admin icon
+          IconButton(
+            icon: const Icon(Icons.admin_panel_settings_outlined),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AdminPanelScreen()),
+            ),
+            tooltip: 'Admin Panel',
+          ),
+          // Clear cart icon (only shows when cart has items)
+          Consumer<CartProvider>(
+            builder: (context, cart, child) {
+              return cart.items.isEmpty
+                  ? const SizedBox()
+                  : IconButton(
+                      icon: const Icon(Icons.delete_sweep_outlined),
+                      onPressed: () => _confirmClear(context),
+                      tooltip: 'Clear Cart',
+                    );
+            },
+          ),
+          // Logout icon
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -49,45 +115,6 @@ class BillingScreen extends StatelessWidget {
               }
             },
             tooltip: 'Logout',
-          ),
-          // Clear cart
-          // AppBar actions-ல் சேர்க்கவும்:
-          IconButton(
-            icon: Stack(children: [
-              const Icon(Icons.shopping_cart_outlined),
-              Consumer<CartProvider>(
-                builder: (_, cart, __) => cart.itemCount > 0
-                    ? Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          width: 14,
-                          height: 14,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text('${cart.itemCount}',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 9)),
-                        ),
-                      )
-                    : const SizedBox(),
-              ),
-            ]),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const CartScreen()),
-            ),
-          ),
-          Consumer<CartProvider>(
-            builder: (_, cart, __) => cart.itemCount > 0
-                ? IconButton(
-                    icon: const Icon(Icons.delete_sweep_outlined),
-                    onPressed: () => _confirmClear(context),
-                  )
-                : const SizedBox(),
           ),
         ],
       ),
@@ -164,7 +191,7 @@ class BillingScreen extends StatelessWidget {
                 child: CircularProgressIndicator(
                     color: Colors.white, strokeWidth: 2)),
             SizedBox(width: 12),
-            Text('Product தேடுகிறோம்...'),
+            Text('Searching for product...'),
           ]),
           duration: Duration(seconds: 10),
           backgroundColor: Color(0xFF1565C0),
@@ -178,7 +205,7 @@ class BillingScreen extends StatelessWidget {
         cart.addProduct(product);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${product.name} சேர்க்கப்பட்டது!'),
+            content: Text('${product.name} added to cart!'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
           ),
@@ -186,7 +213,7 @@ class BillingScreen extends StatelessWidget {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Product கிடைக்கவில்லை!\nBarcode: $result'),
+            content: Text('No product found!\nBarcode: $result'),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 3),
           ),
@@ -200,8 +227,8 @@ class BillingScreen extends StatelessWidget {
       context: context,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Cart Clear செய்யவா?'),
-        content: const Text('அனைத்து products-ம் நீக்கப்படும்.'),
+        title: const Text('Clear Cart?'),
+        content: const Text('All products will be removed.'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
@@ -221,7 +248,7 @@ class BillingScreen extends StatelessWidget {
 }
 
 // ============================================
-// Barcode Scanner Page
+// Barcode Scanner Page - Fixed version without torchState/cameraFacingState
 // ============================================
 class _ScannerPage extends StatefulWidget {
   const _ScannerPage();
@@ -233,25 +260,34 @@ class _ScannerPage extends StatefulWidget {
 class _ScannerPageState extends State<_ScannerPage> {
   final MobileScannerController _controller = MobileScannerController();
   bool _scanned = false;
+  bool _isTorchOn = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Barcode Scan'),
+        title: const Text('Scan Barcode'),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         actions: [
+          // Torch button
           IconButton(
-            icon: const Icon(Icons.flash_on),
-            onPressed: () => _controller.toggleTorch(),
+            icon: Icon(
+              _isTorchOn ? Icons.flash_on : Icons.flash_off,
+              color: _isTorchOn ? Colors.yellow : Colors.grey,
+            ),
+            onPressed: () {
+              setState(() {
+                _isTorchOn = !_isTorchOn;
+              });
+              _controller.toggleTorch();
+            },
           ),
         ],
       ),
       body: Stack(
         children: [
-          // Camera preview
           MobileScanner(
             controller: _controller,
             onDetect: (capture) {
@@ -263,57 +299,90 @@ class _ScannerPageState extends State<_ScannerPage> {
               }
             },
           ),
-
-          // Overlay
-          ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.5),
-              BlendMode.srcOut,
-            ),
-            child: Stack(
-              children: [
-                Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.black,
-                        backgroundBlendMode: BlendMode.dstOut)),
-                Center(
-                  child: Container(
-                    width: 260,
-                    height: 260,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Scan box border
-          Center(
-            child: Container(
-              width: 260,
-              height: 260,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.green, width: 3),
-                borderRadius: BorderRadius.circular(16),
+          
+          // Scanner overlay with scan area
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.7),
+                  Colors.transparent,
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.7),
+                ],
               ),
             ),
           ),
-
-          // Bottom text
+          
+          // Scan area indicator
+          Center(
+            child: Container(
+              width: 280,
+              height: 280,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.green.shade400,
+                  width: 3,
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.green.shade200,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          
+          // Corner markers for better visibility
+          ...List.generate(4, (index) {
+            return Positioned(
+              top: index < 2 ? MediaQuery.of(context).size.height / 2 - 150 : null,
+              bottom: index >= 2 ? MediaQuery.of(context).size.height / 2 - 150 : null,
+              left: index % 2 == 0 ? MediaQuery.of(context).size.width / 2 - 150 : null,
+              right: index % 2 == 1 ? MediaQuery.of(context).size.width / 2 - 150 : null,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: index < 2 ? const BorderSide(color: Colors.green, width: 4) : BorderSide.none,
+                    bottom: index >= 2 ? const BorderSide(color: Colors.green, width: 4) : BorderSide.none,
+                    left: index % 2 == 0 ? const BorderSide(color: Colors.green, width: 4) : BorderSide.none,
+                    right: index % 2 == 1 ? const BorderSide(color: Colors.green, width: 4) : BorderSide.none,
+                  ),
+                ),
+              ),
+            );
+          }),
+          
+          // Instruction text
           const Positioned(
             bottom: 60,
             left: 0,
             right: 0,
             child: Text(
-              'Barcode-ஐ box-க்குள் வையுங்கள்',
+              'Place barcode inside the frame',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500),
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                shadows: [
+                  Shadow(
+                    color: Colors.black54,
+                    offset: Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -342,9 +411,9 @@ class _CartHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
       child: Row(
         children: [
-          _Badge('${cart.itemCount}', 'Products'),
+          _Badge('${cart.itemCount}', 'Items'),
           const SizedBox(width: 10),
-          _Badge('${cart.totalQty}', 'Total Qty'),
+          _Badge('${cart.totalQty}', 'Quantity'),
           const Spacer(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -410,7 +479,7 @@ class _CartItemCard extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
-          // Avatar
+          // Avatar with product image or first letter
           Container(
             width: 44,
             height: 44,
@@ -420,7 +489,7 @@ class _CartItemCard extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                item.product.name.substring(0, 1),
+                item.product.name.isNotEmpty ? item.product.name[0] : 'P',
                 style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -546,9 +615,20 @@ class _BillSummaryState extends State<_BillSummary> {
                           color: Colors.grey.shade300,
                           borderRadius: BorderRadius.circular(2))),
                   const SizedBox(height: 4),
-                  Text(_expanded ? 'மூடு' : 'Bill summary பார்க்கவும்',
-                      style:
-                          TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        _expanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+                        size: 16,
+                        color: Colors.grey.shade500,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(_expanded ? 'Hide details' : 'Show details',
+                          style:
+                              TextStyle(fontSize: 11, color: Colors.grey.shade500)),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -644,7 +724,7 @@ class _BillSummaryState extends State<_BillSummary> {
                           borderRadius: BorderRadius.circular(12)),
                     ),
                     icon: const Icon(Icons.receipt_long, color: Colors.white),
-                    label: Text('Bill உருவாக்கு  •  ${cart.itemCount} items',
+                    label: Text('Create Bill  •  ${cart.itemCount} items',
                         style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
@@ -675,7 +755,7 @@ class _BillSummaryState extends State<_BillSummary> {
           children: [
             const Icon(Icons.check_circle, color: Colors.green, size: 48),
             const SizedBox(height: 12),
-            const Text('Bill Confirm',
+            const Text('Confirm Bill',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
             _Row('Subtotal', '₹${cart.subtotal.toStringAsFixed(2)}'),
@@ -712,16 +792,6 @@ class _BillSummaryState extends State<_BillSummary> {
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
-                    // onPressed: () {
-                    //   Navigator.pop(context);
-                    //   cart.clearCart();
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //         content: Text('Bill saved!'),
-                    //         backgroundColor: Colors.green),
-                    //   );
-                    // },
-                    // billing_screen.dart-ல் _showConfirm method-ல் இதை paste செய்யுங்கள்:
                     onPressed: () async {
                       Navigator.pop(context);
 
@@ -735,7 +805,7 @@ class _BillSummaryState extends State<_BillSummary> {
                                 child: CircularProgressIndicator(
                                     color: Colors.white, strokeWidth: 2)),
                             SizedBox(width: 12),
-                            Text('Invoice save ஆகிறது...'),
+                            Text('Saving invoice...'),
                           ]),
                           duration: Duration(seconds: 30),
                           backgroundColor: Color(0xFF1565C0),
@@ -766,7 +836,7 @@ class _BillSummaryState extends State<_BillSummary> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(invoiceProvider.error ??
-                                  'Invoice create ஆகவில்லை!'),
+                                  'Invoice creation failed!'),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -837,13 +907,13 @@ class _EmptyCartView extends StatelessWidget {
           Icon(Icons.shopping_cart_outlined,
               size: 80, color: Colors.grey.shade300),
           const SizedBox(height: 16),
-          Text('Cart காலியாக உள்ளது',
+          Text('Cart is empty',
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.grey.shade500)),
           const SizedBox(height: 8),
-          Text('Scan அல்லது Product List-லிருந்து சேர்க்கவும்',
+          Text('Scan or add products from the list',
               style: TextStyle(fontSize: 13, color: Colors.grey.shade400)),
           const SizedBox(height: 80),
         ],

@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  url_launcher: ^6.2.6
+  font_awesome_flutter: ^10.4.0
 
   
   mobile_scanner: ^5.2.3       # Barcode scanner
@@ -40,3 +42,7 @@ dev_dependencies:
 #     - assets/images/logo.png
 #     - assets/images/background.jpg
 #     - assets/fonts/your-font.ttf
+
+  pdf: ^3.10.8
+  path_provider: ^2.1.2
+  webview_flutter: ^4.8.0

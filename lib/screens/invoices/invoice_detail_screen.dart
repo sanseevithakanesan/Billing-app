@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../models/invoice.dart';
+import '../../widgets/share_invoice_button.dart';
+import '../../services/pdf_service.dart';
 
 class InvoiceDetailScreen extends StatelessWidget {
   final Invoice invoice;
@@ -87,7 +89,8 @@ class InvoiceDetailScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // ── Print Button ──
-            _PrintButton(invoice: invoice),
+          
+            ShareInvoiceButton(invoice: invoice),
             const SizedBox(height: 32),
           ],
         ),
@@ -95,21 +98,64 @@ class InvoiceDetailScreen extends StatelessWidget {
     );
   }
 
-  void _shareInvoice(BuildContext context) {
-    final text = '''
-Invoice: ${invoice.invoiceNo}
-Customer: ${invoice.customer?.name ?? '-'}
-Date: ${invoice.createdAt.substring(0, 10)}
-Items: ${invoice.items.length}
-Total: ₹${invoice.total.toStringAsFixed(2)}
-Status: $_statusLabel
-    ''';
-    Clipboard.setData(ClipboardData(text: text));
+  void _shareInvoice(BuildContext context) async{
+      try {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Invoice details copied to clipboard!')),
+      const SnackBar(
+        content: Row(children: [
+          SizedBox(width:18, height:18,
+            child: CircularProgressIndicator(color:Colors.white, strokeWidth:2)),
+          SizedBox(width:10),
+          Text('PDF creating...'),
+        ]),
+        duration: Duration(seconds: 30),
+        backgroundColor: Color(0xFF1565C0),
+      ),
+    );
+    await PdfService.generateAndShare(invoice);
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  } catch (e) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
     );
   }
+//     final text = '''
+// Invoice: ${invoice.invoiceNo}
+// Customer: ${invoice.customer?.name ?? '-'}
+// Date: ${invoice.createdAt.substring(0, 10)}
+// Items: ${invoice.items.length}
+// Total: ₹${invoice.total.toStringAsFixed(2)}
+// Status: $_statusLabel
+//     ''';
+//     Clipboard.setData(ClipboardData(text: text));
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(content: Text('Invoice details copied to clipboard!')),
+//     );
+  }
 }
+// void _shareInvoice(BuildContext context) async {
+//   try {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(
+//         content: Row(children: [
+//           SizedBox(width:18, height:18,
+//             child: CircularProgressIndicator(color:Colors.white, strokeWidth:2)),
+//           SizedBox(width:10),
+//           Text('PDF உருவாக்கிறோம்...'),
+//         ]),
+//         duration: Duration(seconds: 30),
+//         backgroundColor: Color(0xFF1565C0),
+//       ),
+//     );
+//     await PdfService.generateAndShare(invoice);
+//     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+//   } catch (e) {
+//     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+//     );
+//   }
 
 // ============================================
 // Invoice Header Card
@@ -591,7 +637,7 @@ class _PrintButton extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                     content: Text(
-                        'Invoice copied! WhatsApp-ல் paste செய்யவும்.'),
+                        'Invoice copied! Paste it in WhatsApp'),
                     backgroundColor: Colors.green),
               );
             },
@@ -602,7 +648,7 @@ class _PrintButton extends StatelessWidget {
             ),
             //icon: const Icon(Icons.chat_outlined, color: Color(0xFF25D366)),
             label: const Text(
-              'WhatsApp-ல் அனுப்பவும்',
+              'Share via WhatsApp',
               style: TextStyle(
                   color: Color(0xFF1565C0),
                   fontWeight: FontWeight.w600),

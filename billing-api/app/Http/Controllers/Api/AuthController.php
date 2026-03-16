@@ -42,10 +42,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    // ==========================================
-    // LOGIN — உள்நுழைவு
-    // POST /api/auth/login
-    // ==========================================
+   
     public function login(Request $request)
     {
         $request->validate([

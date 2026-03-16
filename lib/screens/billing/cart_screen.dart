@@ -49,7 +49,7 @@ class _CartScreenState extends State<CartScreen> {
     if (_selectedCustomer == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Customer select செய்யுங்கள்!'),
+          content: Text('Please select a customer!'),
           backgroundColor: Colors.orange,
         ),
       );
@@ -60,7 +60,7 @@ class _CartScreenState extends State<CartScreen> {
     if (cart.items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Cart காலியாக இருக்கிறது!'),
+          content: Text('Cart is empty! Please add products.'),
           backgroundColor: Colors.red,
         ),
       );
@@ -77,7 +77,7 @@ class _CartScreenState extends State<CartScreen> {
                 color: Colors.white, strokeWidth: 2),
           ),
           SizedBox(width: 12),
-          Text('Invoice save ஆகிறது...'),
+          Text('Saving invoice...'),
         ]),
         duration: Duration(seconds: 30),
         backgroundColor: Color(0xFF1565C0),
@@ -100,7 +100,6 @@ class _CartScreenState extends State<CartScreen> {
 
       if (invoice != null && context.mounted) {
         cart.clearCart();
-        // Invoice detail screen-க்கு navigate
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -111,7 +110,7 @@ class _CartScreenState extends State<CartScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                invoiceProvider.error ?? 'Invoice create ஆகவில்லை!'),
+              invoiceProvider.error ?? 'Invoice creation failed!'),
             backgroundColor: Colors.red,
           ),
         );
@@ -150,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
                   Icon(Icons.shopping_cart_outlined,
                       size: 72, color: Colors.grey),
                   SizedBox(height: 16),
-                  Text('Cart காலியாக உள்ளது',
+                  Text('Cart is empty',
                       style: TextStyle(
                           fontSize: 16, color: Colors.grey)),
                 ],
@@ -209,8 +208,8 @@ class _CartScreenState extends State<CartScreen> {
                               color: Colors.white),
                       label: Text(
                         inv.isLoading
-                            ? 'Invoice save ஆகிறது...'
-                            : 'Invoice உருவாக்கு  •  ₹${cart.grandTotal.toStringAsFixed(2)}',
+                            ? 'Saving invoice...'
+                            : 'Create Invoice  •  ₹${cart.grandTotal.toStringAsFixed(2)}',
                         style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -239,7 +238,7 @@ class _CartScreenState extends State<CartScreen> {
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16)),
-        title: const Text('புதிய Customer',
+        title: const Text('New Customer',
             style: TextStyle(fontWeight: FontWeight.w700)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -247,7 +246,7 @@ class _CartScreenState extends State<CartScreen> {
             TextField(
               controller: nameCtrl,
               decoration: const InputDecoration(
-                labelText: 'பெயர் *',
+                labelText: 'Name *',
                 prefixIcon: Icon(Icons.person_outline),
                 border: OutlineInputBorder(),
               ),
@@ -386,7 +385,7 @@ class _CustomerSelector extends StatelessWidget {
                       Icon(Icons.add,
                           size: 14, color: Color(0xFF1565C0)),
                       SizedBox(width: 2),
-                      Text('புதியது',
+                      Text('New',
                           style: TextStyle(
                               fontSize: 11,
                               color: Color(0xFF1565C0),
@@ -416,7 +415,7 @@ class _CustomerSelector extends StatelessWidget {
                       style: BorderStyle.solid),
                 ),
                 child: const Text(
-                  '+ Customer சேர்க்கவும்',
+                  '+ Add Customer',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Color(0xFF1565C0),
@@ -432,7 +431,7 @@ class _CustomerSelector extends StatelessWidget {
                     horizontal: 12, vertical: 10),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8)),
-                hintText: 'Customer select செய்யுங்கள்',
+                hintText: 'Please select a customer',
               ),
               items: customers.map((c) => DropdownMenuItem(
                 value: c,
@@ -657,7 +656,7 @@ class _NotesField extends StatelessWidget {
         controller: controller,
         maxLines: 2,
         decoration: InputDecoration(
-          hintText: 'Notes (optional) — குறிப்புகள்...',
+          hintText: 'Notes (optional)',
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
           border: InputBorder.none,
           prefixIcon: const Icon(Icons.note_outlined,

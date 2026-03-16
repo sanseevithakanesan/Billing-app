@@ -85,6 +85,9 @@ class BillingApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1565C0)),
         useMaterial3: true,
         fontFamily: 'Roboto',
+        iconTheme: const IconThemeData(
+        size: 24,
+      ),
       ),
       home: const _SplashRouter(),
     );

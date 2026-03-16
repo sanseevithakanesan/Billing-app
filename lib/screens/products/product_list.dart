@@ -44,7 +44,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               controller: _searchController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                hintText: 'Product name அல்லது barcode தேடவும்...',
+                hintText: 'Search by product name or barcode...',
                 hintStyle: const TextStyle(color: Colors.white60, fontSize: 13),
                 prefixIcon: const Icon(Icons.search, color: Colors.white70),
                 suffixIcon: _searchController.text.isNotEmpty
@@ -82,7 +82,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 children: [
                   CircularProgressIndicator(color: Color(0xFF1565C0)),
                   SizedBox(height: 16),
-                  Text('Products load ஆகிறது...',
+                  Text('Products loading...',
                       style: TextStyle(color: Colors.grey)),
                 ],
               ),
@@ -109,7 +109,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       backgroundColor: const Color(0xFF1565C0),
                     ),
                     icon: const Icon(Icons.refresh, color: Colors.white),
-                    label: const Text('மீண்டும் try செய்யுங்கள்',
+                    label: const Text('Try again',
                         style: TextStyle(color: Colors.white)),
                   ),
                 ],
@@ -128,8 +128,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   const SizedBox(height: 16),
                   Text(
                     _searchController.text.isNotEmpty
-                        ? 'தேடிய product கிடைக்கவில்லை'
-                        : 'Products இல்லை',
+                        ? 'No products found'
+                        : 'No products available',
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey.shade500,

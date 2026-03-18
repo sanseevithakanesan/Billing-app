@@ -1,4 +1,4 @@
-// lib/screens/products/product_list_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/product_provider.dart';
@@ -18,7 +18,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   void initState() {
     super.initState();
-    // Screen திறந்தால் products load ஆகும்
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductProvider>().loadProducts();
     });
@@ -196,31 +195,6 @@ class _ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Product Image / Avatar
-          // Container(
-          //   height: 90,
-          //   width: double.infinity,
-          //   decoration: BoxDecoration(
-          //     color: inCart
-          //         ? const Color(0xFFE3F2FD)
-          //         : const Color(0xFFF5F7FA),
-          //     borderRadius: const BorderRadius.vertical(
-          //         top: Radius.circular(13)),
-          //   ),
-          //   child: Center(
-          //     child: Text(
-          //       product.name.substring(0, 1),
-          //       style: TextStyle(
-          //         fontSize: 36,
-          //         fontWeight: FontWeight.w700,
-          //         color: inCart
-          //             ? const Color(0xFF1565C0)
-          //             : Colors.grey.shade400,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
           Padding(
             padding: const EdgeInsets.all(10),
             child: Column(

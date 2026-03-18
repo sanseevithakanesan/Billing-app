@@ -1,4 +1,4 @@
-// lib/screens/invoices/invoice_detail_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../models/invoice.dart';
@@ -120,42 +120,10 @@ class InvoiceDetailScreen extends StatelessWidget {
       SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
     );
   }
-//     final text = '''
-// Invoice: ${invoice.invoiceNo}
-// Customer: ${invoice.customer?.name ?? '-'}
-// Date: ${invoice.createdAt.substring(0, 10)}
-// Items: ${invoice.items.length}
-// Total: ₹${invoice.total.toStringAsFixed(2)}
-// Status: $_statusLabel
-//     ''';
-//     Clipboard.setData(ClipboardData(text: text));
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(content: Text('Invoice details copied to clipboard!')),
-//     );
+
   }
 }
-// void _shareInvoice(BuildContext context) async {
-//   try {
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(
-//         content: Row(children: [
-//           SizedBox(width:18, height:18,
-//             child: CircularProgressIndicator(color:Colors.white, strokeWidth:2)),
-//           SizedBox(width:10),
-//           Text('PDF உருவாக்கிறோம்...'),
-//         ]),
-//         duration: Duration(seconds: 30),
-//         backgroundColor: Color(0xFF1565C0),
-//       ),
-//     );
-//     await PdfService.generateAndShare(invoice);
-//     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//   } catch (e) {
-//     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
-//     );
-//   }
+
 
 // ============================================
 // Invoice Header Card
@@ -297,8 +265,8 @@ class _CustomerCard extends StatelessWidget {
           Container(
             width: 46,
             height: 46,
-            decoration: BoxDecoration(
-              color: const Color(0xFFE3F2FD),
+            decoration: const BoxDecoration(
+              color: Color(0xFFE3F2FD),
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -359,13 +327,13 @@ class _ItemsTable extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F7FA),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5F7FA),
               borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(13)),
+                  BorderRadius.vertical(top: Radius.circular(13)),
             ),
-            child: Row(
-              children: const [
+            child: const Row(
+              children: [
                 Expanded(
                   flex: 3,
                   child: Text('Product',

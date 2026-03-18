@@ -1,4 +1,3 @@
-// lib/screens/billing/cart_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/cart_provider.dart';
@@ -467,10 +466,10 @@ class _CartItemsCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F7FA),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5F7FA),
               borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(13)),
+                  BorderRadius.vertical(top: Radius.circular(13)),
             ),
             child: Row(
               children: [

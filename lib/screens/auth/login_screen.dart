@@ -42,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
                           BoxShadow(
+                            // ignore: deprecated_member_use
                             color: const Color(0xFF1E88E5).withOpacity(0.3),
                             blurRadius: 16,
                             offset: const Offset(0, 8),
@@ -88,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
                           BoxShadow(
+                            // ignore: deprecated_member_use
                             color: Colors.black.withOpacity(0.08),
                             blurRadius: 24,
                             offset: const Offset(0, 10),
@@ -148,8 +150,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               fillColor: Colors.grey.shade50,
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty)
+                              if (v == null || v.isEmpty) {
                                 return 'Email is required';
+                              }
                               if (!v.contains('@') || !v.contains('.')) {
                                 return 'Please enter a valid email';
                               }
@@ -199,8 +202,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               fillColor: Colors.grey.shade50,
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty)
+                              if (v == null || v.isEmpty) {
                                 return 'Password is required';
+                              }
                               if (v.length < 6) return 'Minimum 6 characters';
                               return null;
                             },
@@ -257,6 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     foregroundColor: Colors.white,
                                     elevation: 2,
                                     shadowColor: const Color(0xFF1E88E5)
+                                        // ignore: deprecated_member_use
                                         .withOpacity(0.4),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
@@ -302,10 +307,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         GestureDetector(
                           onTap: () => _showRegister(context),
-                          child: Text(
+                          child: const Text(
                             'Create one',
                             style: TextStyle(
-                              color: const Color(0xFF1E88E5),
+                              color: Color(0xFF1E88E5),
                               fontWeight: FontWeight.w700,
                               fontSize: 15,
                             ),

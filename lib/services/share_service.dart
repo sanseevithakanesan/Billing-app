@@ -53,6 +53,5 @@ class ShareService {
   static Future<void> shareInvoiceViaWhatsApp(Invoice invoice) async {
     final message = buildWhatsAppMessage(invoice);
     await Share.share(message);
-    //await Share.share(message, subject: 'Invoice ${invoice.invoiceNo}');
   }
 }

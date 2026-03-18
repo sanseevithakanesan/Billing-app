@@ -1,6 +1,3 @@
-// lib/screens/billing/billing_screen.dart
-// ── Scan மூலம் அல்லது Product List-லிருந்து real DB products add செய்யலாம் ──
-
 import 'package:provider/provider.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../providers/cart_provider.dart';
@@ -161,8 +158,8 @@ class BillingScreen extends StatelessWidget {
             backgroundColor: const Color(0xFF1565C0),
             icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
             label: const Text('Scan',
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w600)),
+            style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -199,10 +196,12 @@ class BillingScreen extends StatelessWidget {
       );
 
       final product = await provider.findByBarcode(result);
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       if (product != null) {
         cart.addProduct(product);
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${product.name} added to cart!'),
@@ -211,6 +210,7 @@ class BillingScreen extends StatelessWidget {
           ),
         );
       } else {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('No product found!\nBarcode: $result'),
@@ -307,9 +307,11 @@ class _ScannerPageState extends State<_ScannerPage> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
+                  // ignore: deprecated_member_use
                   Colors.black.withOpacity(0.7),
                   Colors.transparent,
                   Colors.transparent,
+                  // ignore: deprecated_member_use
                   Colors.black.withOpacity(0.7),
                 ],
               ),
@@ -442,6 +444,7 @@ class _Badge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
+        // ignore: deprecated_member_use
         color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -593,6 +596,7 @@ class _BillSummaryState extends State<_BillSummary> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
+              // ignore: deprecated_member_use
               color: Colors.black.withOpacity(0.08),
               blurRadius: 12,
               offset: const Offset(0, -4))
@@ -822,6 +826,7 @@ class _BillSummaryState extends State<_BillSummary> {
                           discountAmount: cart.discountAmount,
                         );
 
+                        // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
                         if (invoice != null && context.mounted) {
@@ -834,6 +839,7 @@ class _BillSummaryState extends State<_BillSummary> {
                             ),
                           );
                         } else {
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(invoiceProvider.error ??
@@ -843,7 +849,9 @@ class _BillSummaryState extends State<_BillSummary> {
                           );
                         }
                       } catch (e) {
+                        // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Error: $e'),

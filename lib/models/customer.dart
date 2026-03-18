@@ -1,4 +1,3 @@
-// lib/models/customer.dart
 class Customer {
   final int id;
   final String name;

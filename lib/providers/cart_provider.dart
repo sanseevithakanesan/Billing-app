@@ -1,6 +1,4 @@
-// ============================================
-// lib/providers/cart_provider.dart
-// ============================================
+
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../models/cart_item.dart';
@@ -45,10 +43,8 @@ class CartProvider extends ChangeNotifier {
   void addProduct(Product product, {int qty = 1}) {
     final index = _items.indexWhere((i) => i.product.id == product.id);
     if (index >= 0) {
-      // Already cart-ல் இருந்தால் qty increase
       _items[index].qty += qty;
     } else {
-      // புதிய product சேர்க்கவும்
       _items.add(CartItem(product: product, qty: qty));
     }
     notifyListeners();
@@ -114,17 +110,17 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ─── Invoice-க்கு items list ───────────────
+ 
   List<Map<String, dynamic>> toInvoiceItems() {
     return _items.map((i) => i.toJson()).toList();
   }
 
-  // ─── Product already cart-ல் உள்ளதா ───────
+ 
   bool contains(int productId) {
     return _items.any((i) => i.product.id == productId);
   }
 
-  // ─── Product qty எவ்வளவு ──────────────────
+
   int getQty(int productId) {
     final item = _items.where((i) => i.product.id == productId);
     return item.isNotEmpty ? item.first.qty : 0;

@@ -1,4 +1,3 @@
-// lib/providers/product_provider.dart
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/api_service.dart';
@@ -20,7 +19,7 @@ class ProductProvider extends ChangeNotifier {
   String? get error             => _error;
   bool get isLoading            => _state == LoadState.loading;
 
-  // ── API-லிருந்து Products load செய்யவும் ──
+
   Future<void> loadProducts() async {
     _state = LoadState.loading;
     _error = null;
@@ -35,12 +34,12 @@ class ProductProvider extends ChangeNotifier {
       _state = LoadState.loaded;
     } catch (e) {
       _state = LoadState.error;
-      _error = 'Products load ஆகவில்லை. மீண்டும் try செய்யுங்கள்.';
+      _error = 'Products cannot be loaded. Please try again.';
     }
     notifyListeners();
   }
 
-  // ── Barcode மூலம் product தேடவும் ──
+
   Future<Product?> findByBarcode(String barcode) async {
     try {
       final data = await _api.get('/products/barcode/$barcode');

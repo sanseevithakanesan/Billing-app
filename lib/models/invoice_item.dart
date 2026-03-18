@@ -1,4 +1,4 @@
-// lib/models/invoice_item.dart
+
 class InvoiceItem {
   final int id;
   final int invoiceId;

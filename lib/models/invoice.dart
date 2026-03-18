@@ -1,4 +1,3 @@
-// lib/models/invoice.dart
 import 'customer.dart';
 import 'invoice_item.dart';
 

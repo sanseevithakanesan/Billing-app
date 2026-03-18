@@ -11,7 +11,7 @@ class PdfService {
   static const String storePhone = '+91 98765 43210';
   static const String storeEmail = 'store@billing.com';
 
-  // ── PDF உருவாக்கி Share செய்யவும் ──────────
+
   static Future<void> generateAndShare(Invoice invoice) async {
     final pdf = pw.Document();
 

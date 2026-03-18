@@ -1,4 +1,3 @@
-// lib/providers/invoice_provider.dart
 import 'package:flutter/material.dart';
 import '../models/invoice.dart';
 import '../models/cart_item.dart';
@@ -20,9 +19,7 @@ class InvoiceProvider extends ChangeNotifier {
   String? get error => _error;
   bool get isLoading => _state == InvoiceState.loading;
 
-  // ============================================
-  // Create Invoice — Cart items + Customer
-  // ============================================
+ 
   Future<Invoice?> createInvoice({
     required int customerId,
     required List<CartItem> cartItems,
@@ -54,13 +51,13 @@ class InvoiceProvider extends ChangeNotifier {
       final created = Invoice.fromJson(response['invoice']);
       // final fullData = await _api.get('/invoices/${created.id}');
       // _currentInvoice = Invoice.fromJson(fullData);
-      _invoices.insert(0, _currentInvoice!); // List-ல் top-ல் சேர்க்கவும்
+      _invoices.insert(0, _currentInvoice!); 
       _state = InvoiceState.success;
       notifyListeners();
       return _currentInvoice;
     } catch (e) {
       _state = InvoiceState.error;
-      _error = 'Invoice create ஆகவில்லை. மீண்டும் try செய்யுங்கள்.';
+      _error = 'Invoice cannot be created. Please try again.';
       notifyListeners();
       return null;
     }
@@ -80,7 +77,7 @@ class InvoiceProvider extends ChangeNotifier {
       _state = InvoiceState.success;
     } catch (e) {
       _state = InvoiceState.error;
-      _error = 'Invoices load ஆகவில்லை.';
+      _error = 'Invoices cannot be loaded. Please try again.';
     }
     notifyListeners();
   }

@@ -7,6 +7,10 @@
   <title>@yield('title', 'Admin') — Billing System</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Font Awesome 6 (fixes your missing icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     :root {
       --primary: #1565C0;
@@ -199,7 +203,7 @@
 
     <div class="sidebar-section">Products</div>
     <a href="{{ route('admin.products.index') }}"
-       class="sidebar-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+       class="sidebar-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}">
       <i class="bi bi-box-seam"></i> Products
     </a>
     <a href="{{ route('admin.products.create') }}"
@@ -216,10 +220,10 @@
        class="sidebar-link {{ request()->routeIs('admin.reports.daily') ? 'active' : '' }}">
       <i class="bi bi-calendar3"></i> Daily Sales
     </a>
-    <a href="{{ route('admin.reports.top') }}"
+    {{-- <a href="{{ route('admin.reports.top') }}"
        class="sidebar-link {{ request()->routeIs('admin.reports.top') ? 'active' : '' }}">
       <i class="bi bi-trophy"></i> Top Products
-    </a>
+    </a> --}}
   </nav>
 </aside>
 

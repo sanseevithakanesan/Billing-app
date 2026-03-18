@@ -16,4 +16,20 @@ class InvoiceItem extends Model
         'unit_price',
         'line_total',
     ];
+
+    protected $casts = [
+        'unit_price' => 'float',
+        'line_total' => 'float',
+        'qty' => 'integer',
+    ];
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

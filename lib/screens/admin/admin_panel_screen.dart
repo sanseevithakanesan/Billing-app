@@ -22,7 +22,8 @@ class AdminPanelScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 80, height: 80,
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                   color: const Color(0xFFE3F2FD),
                   borderRadius: BorderRadius.circular(20),
@@ -67,8 +68,7 @@ class AdminPanelScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
-                  icon: const Icon(Icons.open_in_browser,
-                      color: Colors.white),
+                  icon: const Icon(Icons.open_in_browser, color: Colors.white),
                   label: const Text(
                     'Open Admin Panel',
                     style: TextStyle(
@@ -82,8 +82,7 @@ class AdminPanelScreen extends StatelessWidget {
               Text(
                 'Tap the button to open the admin panel in your browser.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 12, color: Colors.grey.shade400),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
               ),
             ],
           ),

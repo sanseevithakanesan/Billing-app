@@ -32,16 +32,16 @@ class AuthProvider extends ChangeNotifier {
         _isLoggedIn = true; _userName = res['user']?['name'];
         _isLoading = false; notifyListeners(); return true;
       }
-      _error = res['message'] ?? 'Login தோல்வியடைந்தது';
+      _error = res['message'] ?? 'Login Failed';
       _isLoading = false; notifyListeners(); return false;
     } catch (e) {
       final msg = e.toString();
       if (msg.contains('401') || msg.contains('unauthorized')) {
-        _error = 'Email அல்லது Password தவறு!';
+        _error = 'Invalid Email or Password.';
       } else if (msg.contains('Timeout') || msg.contains('Socket')) {
-        _error = 'Server connect ஆகவில்லை. WiFi check செய்யுங்கள்.';
+        _error = 'Failed to connect to the server. Please check your WiFi connection.';
       } else {
-        _error = 'Login தோல்வியடைந்தது. மீண்டும் try செய்யுங்கள்.';
+        _error = 'Login Failed. Please try again.';
       }
       _isLoading = false; notifyListeners(); return false;
     }
@@ -59,10 +59,10 @@ class AuthProvider extends ChangeNotifier {
         _isLoggedIn = true; _userName = res['user']?['name'];
         _isLoading = false; notifyListeners(); return true;
       }
-      _error = res['message'] ?? 'Registration தோல்வியடைந்தது';
+      _error = res['message'] ?? 'Registration Failed';
       _isLoading = false; notifyListeners(); return false;
     } catch (e) {
-      _error = 'Registration தோல்வியடைந்தது.';
+      _error = 'Registration Failed. Please try again.';
       _isLoading = false; notifyListeners(); return false;
     }
   }

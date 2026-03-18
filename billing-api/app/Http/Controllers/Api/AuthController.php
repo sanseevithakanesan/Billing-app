@@ -54,11 +54,11 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Password சரியா என்று பார்க்கவும்
-        // if (! $user || ! Hash::check($request->password, $user->password)) {
-        //     return response()->json([
-        //         'message' => 'Email அல்லது Password தவறு',
-        //     ], 401);
-        // }
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Email அல்லது Password தவறு',
+            ], 401);
+        }
 
         // பழைய tokens delete செய்யவும் (optional)
         $user->tokens()->delete();

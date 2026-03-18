@@ -696,7 +696,7 @@ class _BillSummaryState extends State<_BillSummary> {
               ),
             ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 120),
             child: Column(
               children: [
                 Row(
@@ -713,6 +713,7 @@ class _BillSummaryState extends State<_BillSummary> {
                   ],
                 ),
                 const SizedBox(height: 14),
+               
                 SizedBox(
                   width: double.infinity,
                   height: 50,

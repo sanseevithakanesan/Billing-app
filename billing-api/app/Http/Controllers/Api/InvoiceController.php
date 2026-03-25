@@ -129,4 +129,35 @@
 
             return response()->json(['message' => 'Invoice cancelled']);
         }
+
+        public function update(Request $request, $id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        
+        $validated = $request->validate([
+            'customer_id' => 'nullable|exists:customers,id',
+            'status' => 'nullable|in:paid,unpaid,cancelled',
+            // other fields you want to update
+        ]);
+        
+        $invoice->update($validated);
+        
+        return response()->json($invoice->load('customer', 'items.product'));
+    }
+
+    public function updateCustomer(Request $request, $id)
+{
+    $invoice = Invoice::findOrFail($id);
+    
+    $request->validate([
+        'customer_id' => 'nullable|exists:customers,id'
+    ]);
+    
+    $invoice->update(['customer_id' => $request->customer_id]);
+    
+    return response()->json([
+        'message' => 'Customer updated successfully',
+        'invoice' => $invoice->load('customer', 'items.product')
+    ]);
+}
     }

@@ -20,4 +20,13 @@
         Route::apiResource('customers', CustomerController::class);
         Route::apiResource('invoices', InvoiceController::class);
         Route::patch('/invoices/{id}/status', [InvoiceController::class, 'updateStatus']);
+
+        Route::get('/customers/{id}/invoices', function($id) {
+            $invoices = \App\Models\Invoice::where('customer_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            return response()->json(['invoices' => $invoices]);
+        });
+
+        Route::patch('/invoices/{id}/customer', [InvoiceController::class, 'updateCustomer']);
     });

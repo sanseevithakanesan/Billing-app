@@ -34,25 +34,22 @@ class Invoice {
 
   factory Invoice.fromJson(Map<String, dynamic> json) {
     return Invoice(
-      id:             json['id'],
-      invoiceNo:      json['invoice_no'],
-      customerId:     json['customer_id'],
-      customer:       json['customer'] != null
-          ? Customer.fromJson(json['customer'])
-          : null,
-      items:          json['items'] != null
-          ? (json['items'] as List)
-              .map((i) => InvoiceItem.fromJson(i))
-              .toList()
+      id: json['id'],
+      invoiceNo: json['invoice_no'],
+      customerId: json['customer_id'],
+      customer:
+          json['customer'] != null ? Customer.fromJson(json['customer']) : null,
+      items: json['items'] != null
+          ? (json['items'] as List).map((i) => InvoiceItem.fromJson(i)).toList()
           : [],
-      subtotal:       double.parse(json['subtotal'].toString()),
-      taxPercent:     double.parse(json['tax_percent'].toString()),
-      taxAmount:      double.parse(json['tax_amount'].toString()),
+      subtotal: double.parse(json['subtotal'].toString()),
+      taxPercent: double.parse(json['tax_percent'].toString()),
+      taxAmount: double.parse(json['tax_amount'].toString()),
       discountAmount: double.parse(json['discount_amount'].toString()),
-      total:          double.parse(json['total'].toString()),
-      status:         json['status'],
-      notes:          json['notes'],
-      createdAt:      json['created_at'],
+      total: double.parse(json['total'].toString()),
+      status: json['status'],
+      notes: json['notes'],
+      createdAt: json['created_at'],
     );
   }
 }
@@ -77,12 +74,12 @@ class InvoiceItem {
 
   factory InvoiceItem.fromJson(Map<String, dynamic> json) {
     return InvoiceItem(
-      id:          json['id'],
-      productId:   json['product_id'],
+      id: json['id'],
+      productId: json['product_id'],
       productName: json['product']?['name'] ?? 'Unknown',
-      qty:         json['qty'],
-      unitPrice:   double.parse(json['unit_price'].toString()),
-      lineTotal:   double.parse(json['line_total'].toString()),
+      qty: json['qty'],
+      unitPrice: double.parse(json['unit_price'].toString()),
+      lineTotal: double.parse(json['line_total'].toString()),
     );
   }
 }
@@ -105,10 +102,10 @@ class Customer {
 
   factory Customer.fromJson(Map<String, dynamic> json) {
     return Customer(
-      id:      json['id'],
-      name:    json['name'],
-      phone:   json['phone'],
-      email:   json['email'],
+      id: json['id'],
+      name: json['name'],
+      phone: json['phone'],
+      email: json['email'],
       address: json['address'],
     );
   }
